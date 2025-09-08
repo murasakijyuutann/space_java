@@ -35,14 +35,14 @@ Great for beginners learning Java or for review exercises.
 
 1. Clone the repo:
 
+   ```bash
+   git clone https://github.com/murasakijyuutann/space_java.git
+
+
 2. cd space_java
   javac VocaloidArrayExample.java
 java VocaloidArrayExample
 
-   ```bash
-   git clone https://github.com/murasakijyuutann/space_java.git
-
-  
 ---
 
 
