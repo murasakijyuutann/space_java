@@ -1,16 +1,18 @@
 package Student;
 
+import java.util.LinkedList;
+
 public class Student {
     private String name;
     private int age;
     private String major;
-    private Subject[] enrolledSubjects;
+    private LinkedList<Subject> enrolledSubjects;
 
     public Student(String name, int age, String major) {
     this.name = name;
     this.age = age;
     this.major = major;
-    this.enrolledSubjects = new Subject[5];
+    this.enrolledSubjects = new LinkedList<>();
 }
 
 
@@ -22,7 +24,7 @@ public class Student {
         this.name = name;
     }
 
-    public Subject[] getEnrolledSubjects() {
+    public LinkedList<Subject> getEnrolledSubjects() {
         return enrolledSubjects;
     }
 
@@ -43,33 +45,24 @@ public class Student {
     }
 
    public void addSubject(Subject subject) {
-        for (int i = 0; i < enrolledSubjects.length; i++) {
-            if (enrolledSubjects[i] == null) {
-                enrolledSubjects[i] = subject;
-                return;
-            }
-        }
-        System.out.println("Cannot add more subjects, maximum limit reached.");
-    }
+       enrolledSubjects.add(subject);
+   }
 
-    public void displayInfo() {
+   public void displayInfo() {
     System.out.println("Name : " + name);
     System.out.println("Age  : " + age);
     System.out.println("Major: " + major);
     System.out.println("Subjects:");
-    
-    boolean hasSubjects = false;
-    for (Subject subject : enrolledSubjects) {
-        if (subject != null) {
+
+    if (enrolledSubjects.isEmpty()) {
+        System.out.println("  No subjects assigned.");
+    } else {
+        for (Subject subject : enrolledSubjects) {
             subject.displayInfo();
-            hasSubjects = true;
         }
     }
-    if (!hasSubjects) {
-        System.out.println("  No subjects assigned.");
-    }
-
     System.out.println();
 }
+
 
 }

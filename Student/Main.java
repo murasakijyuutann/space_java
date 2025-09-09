@@ -5,11 +5,14 @@ public class Main {
         Student[] students = createStudents();
         Subject[] subjects = createSubjects();
 
-        assignSubjectsToMiku(students[0], subjects); // Miku is at index 0
-        assignSubjectsToLuka(students[1], subjects); // Luka is at index 1
+        assignSubjects(students[0], subjects); // Miku
+        assignSubjects(students[1], subjects); // Luka
+        assignSubjects(students[4], subjects); // Meiko
 
+        System.out.println("\n========== Student Ages ==========");
         printStudentAges(students);
-        System.out.println();
+
+        System.out.println("\n======= Full Student Information =======");
         printAllStudentInfo(students);
     }
 
@@ -35,32 +38,25 @@ public class Main {
         };
     }
 
-    public static void assignSubjectsToMiku(Student miku, Subject[] subjects) {
+    public static void assignSubjects(Student student, Subject[] subjects) {
         for (Subject subject : subjects) {
-            miku.addSubject(subject);
-        }
-    }
-
-    public static void assignSubjectsToLuka(Student luka, Subject[] subjects) {
-        for (Subject subject : subjects) {
-            luka.addSubject(subject);
+            student.addSubject(subject);
         }
     }
 
     public static void printStudentAges(Student[] students) {
-        System.out.println("Student Ages (name + age)");
-        System.out.println("----------------------------------");
+        System.out.printf("%-20s | %-4s%n", "Name", "Age");
+        System.out.println("---------------------|------");
         for (Student student : students) {
-            System.out.println(student.getName() + " - " + student.getAge() + " years old");
+            System.out.printf("%-20s | %2d%n", student.getName(), student.getAge());
         }
     }
 
     public static void printAllStudentInfo(Student[] students) {
-        System.out.println("Full Student Information");
-        System.out.println("-------<Student Information>---------------------------");
         for (Student student : students) {
+            System.out.println("\n----------------------------------------");
             student.displayInfo();
         }
-        System.out.println("------------------------------------------------------");
+        System.out.println("----------------------------------------");
     }
 }
