@@ -1,6 +1,6 @@
 package Vehicle;
 
-public class Vehicle {
+public abstract class Vehicle {
     private String manufacturer;
     private String model;
     private int year;
@@ -15,6 +15,9 @@ public class Vehicle {
         this.ownerFullName = ownerFullName;
     }
 
+    // ✅ Abstract methods
+    public abstract void makeSound();
+    public abstract void move();
 
     public void showInfo() {
         System.out.println("Engine Started");
@@ -25,16 +28,14 @@ public class Vehicle {
         System.out.println("Owner's Full Name: " + ownerFullName);
     }
 
-    // Type Conversion Method (Override-style)
+    // Type Conversion Method (Optional for all vehicles)
     public void convertMileage() {
-        int mileageAsInt = (int) mileage; // 🔹 double → int
-        String mileageStr = String.valueOf(mileage); // 🔹 double → String
+        int mileageAsInt = (int) mileage;
+        String mileageStr = String.valueOf(mileage);
 
         System.out.println("🔁 Converting Mileage:");
         System.out.println("As int   : " + mileageAsInt);
         System.out.println("As String: " + mileageStr);
-
-        // If you want binary/hex/oct of int mileage
         System.out.println("Binary   : " + Integer.toBinaryString(mileageAsInt));
         System.out.println("Hex      : " + Integer.toHexString(mileageAsInt));
         System.out.println("Octal    : " + Integer.toOctalString(mileageAsInt));

@@ -9,7 +9,6 @@ public class Main {
         // Create Car, Bike, and Truck objects
         Car AMGS500 = new Car("AMGS500", "Mercedes-Benz", 2020, 15000.5, Car.CarType.SEDAN, "佐藤善明");
         Car Carrera911 = new Car("Carrera 911", "Porsche", 1974, 12000.0, Car.CarType.SPORTS, "田中美咲");
-        
 
         Truck ElCamino = new Truck("ElCamino", "Chevrolet", 1977, 7000.0, Truck.TruckType.PICKUP, "高橋唯人");
         Truck SVGRAPTOR = new Truck("SVGRAPTOR", "Ford", 2018, 9000.0, Truck.TruckType.PICKUP, "鈴木桔梗");
