@@ -51,3 +51,4 @@ java VocaloidArrayExample
 
 
    
+# java_practise
