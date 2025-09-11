@@ -10,6 +10,7 @@ public class CalendarDisplay {
         System.out.printf("\nCalendar for %d - %02d\n", year, month);
         System.out.println("Sun Mon Tue Wed Thu Fri Sat");
         System.out.println("----------------------------");
+        
     }
 
     public static void main(String[] args) {
