@@ -33,4 +33,15 @@ public class Bike extends Vehicle {
         System.out.println("Bike-specific conversion:");
         super.convertMileage(); // Use Vehicle's version
     }
+
+    // ✅ Implement abstract methods
+    @Override
+    public void makeSound() {
+        System.out.println(getModel() + " goes VROOM VROOM! ");
+    }
+
+    @Override
+    public void move() {
+        System.out.println(getModel() + " is now driving smoothly on the road.");
+    }
 }
