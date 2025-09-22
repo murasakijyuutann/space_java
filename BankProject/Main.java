@@ -1,88 +1,162 @@
 package BankProject;
 
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Main {
 
-     public static void clearLine() {
-        System.out.println("----------------------------------------------");
-    }
+    private static final Scanner scanner = new Scanner(System.in);
+    private static LinkedList<Account> accounts = new LinkedList<>();
 
     public static void main(String[] args) {
+        // try {
+        while (true) {
+            clearLine();
+            System.out.println("===== Bank Menu =====");
+            System.out.println("0. Create New Account");
+            System.out.println("1. Deposit");
+            System.out.println("2. Withdraw");
+            System.out.println("3. Transfer");
+            System.out.println("4. View Account Summary");
+            System.out.println("5. Exit");
 
-        LinkedList<Account> accounts = new LinkedList<>();
+            System.out.print("Choose an option (0 - 5): ");
 
-        Account acc1 = new Account("佐藤善明", "123456");
-        Account acc2 = new Account("佐藤紡", "654321");
-        Account acc3 = new Account("佐藤太郎", "112233");
+            int option = 0;
+            try {
+                option = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("[ERROR] Please enter a valid number.");
+                e.printStackTrace();
+                continue; // Go back to menu
+            }
 
-        accounts.add(acc1);
-        accounts.add(acc2);
-        accounts.add(acc3);
-        clearLine();
+            switch (option) {
+                case 0 -> createAccount();
+                case 1 -> performDeposit();
+                case 2 -> performWithdrawal();
+                case 3 -> performTransfer();
+                case 4 -> viewAccountSummary();
+                case 5 -> {
+                    System.out.println("[INFO] Exiting program. Goodbye!");
+                    return;
+                }
+                default -> System.out.println("[WARN] Invalid option. Try again.");
+            }
+        }
+        // } catch (Exception e) {
+        //     System.out.println("[FATAL ERROR] Unexpected exception: " + e.getMessage());
+        //     e.printStackTrace();
+        // } finally {
+        //     scanner.close();
+        // }
 
-        setInitialBalance(acc1, 100000.0);
-        setInitialBalance(acc2, 20000.0);
-        setInitialBalance(acc3, 30000.0);
+    }
 
-       for (Account acc : accounts) {
-            printAccountSummary(acc);
+
+
+    // Initial setup
+    private static void createAccount() {
+        System.out.print("Enter account holder's full name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter account number (format: XX-XXXX-XXXX): ");
+        String number = scanner.nextLine();
+
+        try {
+            Account newAccount = new Account(number, name);
+            accounts.add(newAccount);
+            System.out.println("[INFO] Account created successfully.");
+            System.out.printf("[INFO] Total accounts now: %d%n", accounts.size());
+        } catch (IllegalArgumentException e) {
+            System.out.println("[ERROR] " + e.getMessage());
+        }
+    }
+
+    // Account selector
+    private static Account selectAccount(String prompt) {
+        System.out.println(prompt);
+        for (int i = 0; i < accounts.size(); i++) {
+            System.out.printf("[%d] %s (%s)%n", i, accounts.get(i).getAccountHolderFullName(), accounts.get(i).getAccountNumber());
+        }
+        System.out.print("Enter account index: ");
+        int index = scanner.nextInt();
+        scanner.nextLine(); // consume newline
+        if (index >= 0 && index < accounts.size()) {
+            return accounts.get(index);
+        } else {
+            System.out.println("[ERROR] Invalid account 0index.");
+            return null;
+        }
+    }
+
+    // Deposit
+    private static void performDeposit() {
+        Account acc = selectAccount("[DEPOSIT] Select account:");
+        if (acc == null) return;
+        System.out.print("Enter amount to deposit: ");
+        double amount = scanner.nextDouble();
+        scanner.nextLine();
+        acc.deposit(amount);
+        System.out.printf("[INFO] Deposit successful. New balance: %.0f$%n", acc.getBalance());
+    }
+
+    // Withdraw
+    private static void performWithdrawal() {
+        Account acc = selectAccount("[WITHDRAW] Select account:");
+        if (acc == null) return;
+        System.out.print("Enter amount to withdraw: ");
+        double amount = scanner.nextDouble();
+        scanner.nextLine();
+        acc.withdraw(amount);
+        System.out.printf("[INFO] Withdrawal complete. New balance: %.0f$%n", acc.getBalance());
+    }
+
+    // Transfer
+    private static void performTransfer() {
+        Account sender = selectAccount("[TRANSFER] Select sender account:");
+        if (sender == null) return;
+
+        Account receiver = selectAccount("[TRANSFER] Select receiver account:");
+        if (receiver == null || sender == receiver) {
+            System.out.println("[ERROR] Invalid receiver.");
+            return;
         }
 
-        performDeposit(acc1, 5000.0);
-        performDeposit(acc2, 3000.0);
-        performDeposit(acc3, 7000.0);
+        System.out.print("Enter amount to transfer: ");
+        double amount = scanner.nextDouble();
+        scanner.nextLine();
 
-        for (Account acc : accounts) {
-            printAccountSummary(acc);
+        if (amount <= 0 || amount > sender.getBalance()) {
+            System.out.println("[ERROR] Invalid or insufficient balance.");
+            return;
         }
 
-        clearLine();
+        sender.withdraw(amount);
+        receiver.deposit(amount);
+        System.out.println("[INFO] Transfer successful.");
+    }
 
-        performWithdrawal(acc3, 2000.0);
-        for (Account acc : accounts) {
-            printAccountSummary(acc);
+    // Account summary
+    private static void viewAccountSummary() {
+        Account acc = selectAccount("[SUMMARY] Select account to view:");
+        if (acc == null) return;
+
+        System.out.println("[ACCOUNT] " + acc.getAccountHolderFullName());
+        System.out.println("[NUMBER]  " + acc.getAccountNumber());
+        System.out.printf("[BALANCE] %.0f$%n", acc.getBalance());
+        System.out.println("[HISTORY] Transaction Log:");
+        if (acc.getTransactions().isEmpty()) {
+            System.out.println("  No transactions.");
+        } else {
+            for (Transaction tx : acc.getTransactions()) {
+                System.out.println("  - " + tx.getSummary());
+            }
         }
+    }
 
+    // Line separator
+    private static void clearLine() {
+        System.out.println("--------------------------------------------------");
     }
     
-    public static void setInitialBalance(Account account, double amount) {
-        account.setBalance(amount);
-        System.out.println("Initial balance set for " + account.getAccountHolderFullName() + ": " + account.getBalance());
-        clearLine();
-    }
-
-
-    public static void performDeposit(Account account, double amount) {
-        double previous = account.getBalance();
-        account.deposit(amount);
-        System.out.printf("Deposited: %.2f + Previous Balance: %.2f → Current Balance: %.2f%n",
-            amount, previous, account.getBalance());
-        clearLine();
-    }
-    
-    public static void performWithdrawal(Account account, double amount) {
-        double previous = account.getBalance();
-        account.withdraw(amount);
-        System.out.printf("Withdrew: %.2f + Previous Balance: %.2f → Current Balance: %.2f%n",
-                amount, previous, account.getBalance());
-        clearLine();
-    }
-
-    public static void printAccountSummary(Account account) {
-    System.out.println("Account Holder : " + account.getAccountHolderFullName());
-    System.out.println("Account Number : " + account.getAccountNumber());
-    System.out.printf("Balance        : %.2f円%n", account.getBalance());
-
-    System.out.println("Transactions   :");
-    if (account.getTransactionCount() == 0) {
-        System.out.println("   (No transactions)");
-    } else {
-        for (int i = 0; i < account.getTransactionCount(); i++) {
-            System.out.printf("   [%d] %s%n", i + 1, account.getTransactions()[i]);
-        }
-    }
-    clearLine();
-}
-
 }

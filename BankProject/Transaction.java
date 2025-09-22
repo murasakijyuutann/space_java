@@ -1,12 +1,17 @@
 package BankProject;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Transaction {
-    private double amount;
-    private TransactionType.Type type;
+    private final double amount;
+    private final TransactionType.Type type;
+    private final LocalDateTime timestamp;
 
     public Transaction(double amount, TransactionType.Type type) {
         this.amount = amount;
         this.type = type;
+        this.timestamp = LocalDateTime.now(); // Automatically records time
     }
 
     public double getAmount() {
@@ -17,15 +22,25 @@ public class Transaction {
         return type;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 
-    public void setType(TransactionType.Type type) {
-        this.type = type;
-    }
-
+    @Override
     public String toString() {
-        return "" + type;
+        return "Transaction{" +
+               "type=" + type +
+               ", amount=" + amount +
+               ", timestamp=" + timestamp +
+               '}';
+    }
+
+    public String getSummary() {
+        return String.format("[%s] %s: $%.2f", timestamp, type, amount);
+    }
+
+    public String getFormattedTimeStamp() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return timestamp.format(formatter);
     }
 }
